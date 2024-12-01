@@ -11,6 +11,11 @@ import Home from "./components/pages/home/Home";
 import Detail from "./components/pages/detail/Detail";
 import Cart from './components/pages/cart/Cart';
 import Shop from './components/pages/shop/Shop';
+import ScrollToTop from './components/ScrollToTop';
+import Auth from './components/auth/Auth';
+import Login from './components/login/Login';
+import Signup from './components/signup/Signup';
+import Contact from './components/pages/contact/Contact';
 
 
 const App = () => {
@@ -45,8 +50,14 @@ const App = () => {
                     <Route path="/detail/:id" element={<Detail />} />
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/shop" element={<Shop />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/signup" element={<Signup />} />
+                    <Route path="/auth" element={<Auth />} />
+                    <Route path="/contact" element={<Contact />} />
+
                   </Routes>
                 </main>
+                <ScrollToTop />
               </Router>
             </BasketProvider>
           </CurrencyProvider>

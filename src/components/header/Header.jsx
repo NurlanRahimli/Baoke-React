@@ -40,6 +40,7 @@ const Header = () => {
     const navigate = useNavigate();
     const { basket, removeFromBasket, clearBasket, addToBasket, decrementFromBasket } = useBasket(); // Access basket state and remove function
     const { currency, setCurrency } = useContext(CurrencyContext);
+    const user = JSON.parse(localStorage.getItem("loggedInUser")); // Get current logged-in user
 
 
 
@@ -112,6 +113,23 @@ const Header = () => {
     };
 
     const subtotal = basket.reduce((total, item) => total + (item.price - (item.price * item.discountPercentage / 100)) * item.quantity, 0);
+
+
+    // Logout
+    const handleLogout = () => {
+        // Remove only the logged-in user and auth token
+        localStorage.removeItem("loggedInUser");
+        localStorage.removeItem("authToken");
+
+        Swal.fire({
+            icon: "success",
+            title: "Log out successful",
+            text: `You logged out successfully!`,
+            timer: 1000,
+            showConfirmButton: false,
+        });
+        navigate("/"); // Redirect to login page
+    };
 
 
 
@@ -275,8 +293,27 @@ const Header = () => {
                                 </button>
                                 <span className='font-custom px-2 text-[19px] font-semibold'>Account</span>
                                 <span className='border mb-1'></span>
-                                <span className='text-[16px] font-custom px-2 cursor-pointer hover:text-[#C84C53] transition duration-500'>Login</span>
-                                <span className='text-[16px] font-custom px-2 pb-2 cursor-pointer hover:text-[#C84C53] transition duration-500'>Create Account</span>
+                                {user ? (
+                                    <button
+                                        onClick={handleLogout}
+                                        className="text-[16px] font-custom px-2 cursor-pointer hover:text-[#C84C53] transition duration-500"
+                                    >
+                                        Logout
+                                    </button>
+                                ) : (
+                                    <>
+                                        <Link to="/login">
+                                            <span className="text-[16px] font-custom px-2 cursor-pointer hover:text-[#C84C53] transition duration-500">
+                                                Login
+                                            </span>
+                                        </Link>
+                                        <Link to="/signup">
+                                            <span className="text-[16px] font-custom pb-2 px-2 cursor-pointer hover:text-[#C84C53] transition duration-500">
+                                                Create Account
+                                            </span>
+                                        </Link>
+                                    </>
+                                )}
 
                             </motion.ul>
                         </motion.div>
@@ -317,21 +354,42 @@ const Header = () => {
                                             <span>Shop</span>
                                         </Link>
                                     </li>
-                                    <li className="text-white flex items-center space-x-2  p-2 rounded-md cursor-pointer">
+                                    {/* <li className="text-white flex items-center space-x-2  p-2 rounded-md cursor-pointer">
                                         <Link to={'/blog'}>
                                             <span>Blog</span>
                                         </Link>
-                                    </li>
+                                    </li> */}
                                     <li className="text-white flex items-center space-x-2 hover:bg-[#C84C53] p-2 rounded-md cursor-pointer">
                                         <Link to={'/cart'}>
                                             <span>Cart</span>
                                         </Link>
                                     </li>
-                                    <li className="text-white flex items-center space-x-2 hover:bg-[#C84C53] p-2 rounded-md cursor-pointer">
+                                    {user ? (
+                                        <button
+                                            onClick={handleLogout}
+                                            className="text-white flex items-center space-x-2 hover:bg-[#C84C53] p-2 rounded-md cursor-pointer"
+                                        >
+                                            Logout
+                                        </button>
+                                    ) : (
+                                        <>
+                                            <Link to="/login">
+                                                <span className="text-white flex pt-5 items-center space-x-2 hover:bg-[#C84C53] p-2 rounded-md cursor-pointer">
+                                                    Login
+                                                </span>
+                                            </Link>
+                                            <Link to="/signup">
+                                                <span className="text-white flex pt-5 items-center space-x-2 hover:bg-[#C84C53] p-2 rounded-md cursor-pointer">
+                                                    Create Account
+                                                </span>
+                                            </Link>
+                                        </>
+                                    )}
+                                    {/* <li className="text-white flex items-center space-x-2 hover:bg-[#C84C53] p-2 rounded-md cursor-pointer">
                                         <Link to={'/account'}>
                                             <span>Account</span>
                                         </Link>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
                         </div>
@@ -345,17 +403,14 @@ const Header = () => {
                     <Link to={'/'}>
                         <span className='text-white font-custom text-[18px] hover:text-[#C84C53] transition duration-500'>Home</span>
                     </Link>
-                    <Link to={'/blog'}>
+                    {/* <Link to={'/blog'}>
                         <span className='text-white font-custom text-[18px] hover:text-[#C84C53] transition duration-500'>Blog</span>
-                    </Link>
+                    </Link> */}
                     <Link to={'/shop'}>
                         <span className='text-white font-custom text-[18px] hover:text-[#C84C53] transition duration-500'>Shop</span>
                     </Link>
                     <Link to={'/contact'}>
                         <span className='text-white font-custom text-[18px] hover:text-[#C84C53] transition duration-500'>Contact</span>
-                    </Link>
-                    <Link to={'/about'}>
-                        <span className='text-white font-custom text-[18px] hover:text-[#C84C53] transition duration-500'>About</span>
                     </Link>
                     <Link to={'/cart'}>
                         <span className='text-white font-custom text-[18px] hover:text-[#C84C53] transition duration-500'>Cart</span>

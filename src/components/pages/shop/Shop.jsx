@@ -237,7 +237,14 @@ const Shop = () => {
 
                                     </div>
                                 </div>
-                                <ul className="space-y-2 mt-5">
+                                <ul
+                                    className="space-y-2 mt-5   "
+                                    style={{
+                                        height: '300px',
+                                        overflowY: 'auto',
+                                        scrollbarWidth: 'none', // For Firefox
+                                        msOverflowStyle: 'none', // For Internet Explorer
+                                    }} >
                                     <li>
                                         {/* Collapsible Header */}
                                         <div
@@ -253,15 +260,6 @@ const Shop = () => {
                                                 ▼
                                             </span>
                                         </div>
-                                        {/* <button
-                                            className={`block w-full text-left px-4 py-2 rounded ${selectedCategory === ''
-                                                ? 'bg-blue-500 text-white'
-                                                : 'bg-gray-700 text-white hover:bg-gray-600'
-                                                }`}
-                                            onClick={() => handleCategoryChange('')}
-                                        >
-                                            All
-                                        </button> */}
                                     </li>
                                     {categories.map((category, index) => (
                                         <li key={index} className={`mt-4 transition-all duration-300 ease-in-out overflow-hidden ${categoryOpen ? 'max-h-screen' : 'max-h-0'
@@ -485,7 +483,7 @@ const Shop = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }

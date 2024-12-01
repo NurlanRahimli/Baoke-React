@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -24,8 +24,9 @@ import { apiURL } from '../util/api';
 import Swal from 'sweetalert2';
 import { useBasket } from '../pages/cart/BasketContext'
 import { CurrencyContext } from '../header/currencyContext';
+import { isLoggedIn } from '../pages/cart/Helper';
 
-const Products = () => {
+const Products = ({ product }) => {
     const prevRef = useRef(null);
     const nextRef = useRef(null);
     const [products, setProducts] = useState([]); // State to store products
@@ -70,6 +71,34 @@ const Products = () => {
             : price.toFixed(2); // Default to dollars
     };
 
+
+    const navigate = useNavigate();
+
+    const handleAddToBasket = () => {
+        if (!isLoggedIn()) {
+            // If user is not logged in, show SweetAlert and redirect to login
+            Swal.fire({
+                icon: "warning",
+                title: "You have to log in",
+                text: "Log in to add a product to your basket.",
+                showConfirmButton: true,
+                confirmButtonText: "Go to Login",
+            }).then(() => {
+                navigate("/login"); // Redirect to login page
+            });
+            return;
+        }
+
+        // If logged in, add product to the basket
+        addToBasket(product);
+        Swal.fire({
+            icon: "success",
+            title: "Added to Basket",
+            text: `${product.title} has been added to your basket.`,
+            timer: 2000,
+            showConfirmButton: false,
+        });
+    };
 
     return (
         <>
@@ -176,7 +205,6 @@ const Products = () => {
                     <button ref={prevRef} className='border px-3 py-3 hover:bg-[#C84C53] hover:border-[#C84C53] transition duration-500 absolute top-[50%] left-[0%] z-50 text-white rounded-full  '><FaArrowLeft className='md:text-[25px] text-[17px]' /></button>
                     <button ref={nextRef} className='border px-3 py-3 hover:bg-[#C84C53] hover:border-[#C84C53] transition duration-500 absolute top-[50%] right-[0%] z-50 text-white rounded-full  '><FaArrowRight className='md:text-[25px] text-[17px]' /></button>
                 </div>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Explicabo blanditiis quia, aperiam minima natus assumenda. Quas error omnis dicta amet quisquam assumenda doloremque vitae sequi aut quasi voluptate dolorum ratione, modi aspernatur rerum ex beatae molestiae. Fugiat, consequatur numquam eos quod commodi alias nesciunt, dignissimos, provident asperiores impedit exercitationem! Id et soluta blanditiis, qui corrupti voluptas ipsam natus possimus deleniti, exercitationem saepe eaque quisquam sed ducimus velit perferendis eligendi nostrum tenetur dolorum. Delectus tenetur ea exercitationem libero nemo necessitatibus, ullam quis optio maxime, sed, ducimus ad molestias ut eius velit vel nostrum magni modi eveniet iusto qui. Laboriosam blanditiis quidem fuga sequi sint corrupti sit qui, sed voluptates expedita quas. Quam, illo mollitia. Fuga commodi, quo doloremque repellendus harum exercitationem, cum laboriosam rerum consectetur quae nulla molestias beatae illum! Dolor est, pariatur ut placeat facere voluptatum, similique, fuga ea neque quidem deleniti! Magni quod, quis quaerat nobis delectus a dolor sequi, hic minus voluptas quos cumque nisi qui. Earum labore vitae, deserunt vero vel nisi! Asperiores, amet? Dicta ab vero neque, doloremque cupiditate fuga id blanditiis voluptas ratione asperiores autem voluptates ut eaque voluptate quasi, nihil a odio quam adipisci, officiis aperiam deserunt nulla eos? Corporis doloremque harum laboriosam quo, molestias labore amet rerum alias saepe, atque reprehenderit modi fugit sed est architecto dolorum distinctio obcaecati eius. Quibusdam voluptatem nesciunt pariatur natus. Dolor minus iure rem, ducimus ipsa magni vitae. Possimus omnis totam ducimus obcaecati mollitia tenetur, voluptate vel quae esse? Excepturi illum molestias fuga similique iure magnam perferendis molestiae esse minima, accusantium maxime iusto alias in natus dignissimos a quisquam repudiandae facilis vel nobis cum ea at deserunt suscipit. Necessitatibus natus labore officiis hic exercitationem illum eaque fugit sequi eveniet in, inventore tempore quam, dolor voluptas ipsum. Quam voluptates eaque error! Odit et maiores quis, nisi at ut quidem officiis autem eligendi totam illo porro obcaecati nobis placeat provident. In, a velit facilis voluptatum nisi perferendis accusantium, culpa laborum quam modi veritatis nemo molestiae fuga deleniti ab quas officiis est vitae nihil similique amet ratione. Iste nobis, quaerat molestias sunt atque iure animi rem eligendi ducimus fugiat est ab eveniet obcaecati aperiam neque natus ipsum quis? Dicta nostrum saepe perferendis quidem recusandae veritatis sequi laborum itaque dolorum ex animi odio delectus repellendus aperiam, hic similique inventore. Dolore, consequuntur nemo! Saepe voluptates hic consequatur quod recusandae. Doloremque, dolorum sapiente modi id maxime architecto dolorem vitae eum nihil reiciendis dolor quam quasi ad possimus, natus est nobis autem voluptates ullam pariatur, ducimus tempore. Ab reprehenderit labore maxime earum, harum adipisci expedita distinctio, pariatur omnis ea delectus reiciendis sed accusamus voluptate doloremque in saepe doloribus. Veniam, tempore recusandae. Iusto officiis doloremque eius eum assumenda! Molestiae, officia aliquam perspiciatis iusto, vero in magnam quia dignissimos enim cum, asperiores rerum reiciendis nobis sit nam natus maiores omnis. Consequatur ab ut obcaecati quaerat nulla dolor, sunt dolores, soluta sapiente sequi distinctio velit? Soluta in, labore earum sequi, saepe facilis quo consequuntur quasi vitae commodi officiis placeat fugit aliquam? Officiis error sint vitae nesciunt beatae voluptates aliquam? Quas explicabo amet nisi totam maiores dolor fugiat maxime quo quis voluptates quisquam dolorum voluptas nesciunt assumenda corporis, molestiae placeat quibusdam delectus inventore! Error dolor ipsam ut ab voluptatibus cum ducimus exercitationem quod, voluptates, atque facere? Assumenda a deserunt, beatae debitis tempore non vel id iusto voluptates architecto minima voluptatum dignissimos fuga esse quas natus. Culpa error perspiciatis nobis quae, sint corporis, rem at quos eligendi quasi ducimus tenetur illo. Placeat excepturi doloremque quae atque, nostrum recusandae fuga aliquid? Hic sapiente ipsum sint laboriosam adipisci veniam explicabo, reiciendis earum omnis, molestiae mollitia enim vero nemo voluptatem. Est accusantium voluptatum et consequuntur, obcaecati quidem. Ipsam, dicta, saepe nesciunt, blanditiis reiciendis et dolorem ipsum veniam aliquam dolores impedit ipsa minus? Ut a aut iure suscipit illo dignissimos ad animi debitis magni unde sed, atque quaerat mollitia doloribus optio dolore nostrum. Nam, facere atque ducimus cumque laborum est vel nulla blanditiis quam officiis, neque asperiores alias at aspernatur error perspiciatis dignissimos excepturi consequatur deleniti! Inventore voluptatum, temporibus maxime itaque delectus hic consectetur distinctio numquam aperiam mollitia nisi iure vel exercitationem, nihil rerum quibusdam expedita iusto. Illo at in magni eligendi. Aperiam, ut ab eius et perferendis deleniti obcaecati amet a, odio aliquid repellat architecto minus molestiae beatae nam aspernatur corrupti ea quam. Nihil quam illo tenetur neque consequatur temporibus odio officiis doloremque a placeat, at enim doloribus laborum odit consectetur quasi quo autem magnam expedita dolore? Atque quis ratione repellat assumenda, ad itaque reprehenderit culpa eveniet amet beatae aperiam, corrupti, veniam praesentium quae consequatur minus. Iste sit blanditiis repellat consectetur, explicabo eligendi earum quod dignissimos cum. Ut unde saepe exercitationem maxime quidem nam, repellendus at corrupti cupiditate quae et voluptate porro, reiciendis tempora sint facilis odit commodi consequatur minima placeat voluptatum. Fugiat mollitia quis soluta ducimus repellendus adipisci quisquam eum odio nobis dolore cumque quo, saepe blanditiis. At tempore repudiandae eos debitis neque veniam repellendus quisquam excepturi tenetur delectus labore explicabo odit voluptas maiores quibusdam similique sit nesciunt harum, voluptate reprehenderit doloremque porro necessitatibus atque. Ipsum nostrum molestias quis! Esse eum eaque facere dolore, beatae maxime magni quae eveniet quisquam! Saepe fugit suscipit, cupiditate optio, laudantium earum cumque consequatur esse aut tenetur, praesentium sint. Accusamus, labore corrupti perferendis porro ut laboriosam perspiciatis repudiandae tempore, debitis architecto a adipisci tempora quod voluptatem dicta mollitia. Aliquam est architecto totam iste iure ea? Quis commodi minima earum porro laboriosam nemo animi! Consectetur sint dolore neque dolores, impedit esse quisquam illum, dignissimos pariatur asperiores suscipit repellat, harum non obcaecati excepturi ab nemo minus? Cum voluptas perspiciatis non ipsa numquam omnis cupiditate alias enim ratione repudiandae ad assumenda aut quos nostrum ullam quidem quaerat sed, deleniti eaque. Blanditiis, quod quo. Repellendus nihil, incidunt repudiandae illum explicabo harum id veritatis! Consectetur ducimus perferendis vitae totam praesentium officiis placeat recusandae quidem quos ab. Excepturi porro quaerat ipsa consectetur fugit nobis enim? Corporis modi dolorum, pariatur excepturi commodi minima blanditiis nihil sequi labore aliquam voluptate eius quos cum officia! Voluptas corporis dignissimos at expedita ad, placeat nihil suscipit corrupti adipisci.</p>
             </div >
         </>
     )
